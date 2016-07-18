@@ -19,9 +19,35 @@ public class DBHandler : MonoBehaviour {
 		var database = server.GetDatabase("unity");
 		var shopcollections= database.GetCollection<BsonDocument>("vrshop");
 		Debug.Log ("Connected!!0.0");
+
+		//insert into collections
+		BsonDocument [] batch={
+			new BsonDocument{
+				{"name", "nike"},
+				{"price", "100"}
+			}, 
+			new BsonDocument{
+				{"name", "adidas"},
+				{"price", "200"}
+			},
+			new BsonDocument{
+				{"name", "Lining"},
+				{"price", "300"}
+			} 
+		};
+		shopcollections.InsertBatch (batch);
+
+		//print all collections
 		foreach (var document in shopcollections.FindAll()) {
-			Debug.Log ("Get info: \n" + document);
+			Debug.Log ("Get all info: \n" + document);
 		}
+		//print one collection
+		foreach (var document in shopcollections.Find(new QueryDocument("name", "nike"))){
+			Debug.Log ("Get one info: \n" + document);
+		}
+		//find the first one:
+		Debug.Log("5. SELECT FIRST DOC: \n" + shopcollections.FindOne ().ToString());
+
 	}
 	
 	// Update is called once per frame
